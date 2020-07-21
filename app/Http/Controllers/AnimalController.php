@@ -5,10 +5,16 @@ namespace App\Http\Controllers;
 use App\Animal;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\AnimalResource;
+use Auth;
 
 class AnimalController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['index','show']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -91,7 +97,7 @@ class AnimalController extends Controller
      */
     public function show(Animal $animal)
     {
-        return response($animal, Response::HTTP_OK);
+        return response(new AnimalResource($animal), Response::HTTP_OK);
     }
 
     /**
@@ -114,6 +120,7 @@ class AnimalController extends Controller
      */
     public function update(Request $request, Animal $animal)
     {
+        $this->authorize('update', $animal);
         $animal->update($request->all());
         return response($animal, Response::HTTP_OK);
     }
@@ -129,6 +136,19 @@ class AnimalController extends Controller
          // 把這個實體物件刪除
          $animal->delete();
         // 回傳 null 並且給予 204 狀態碼
+        return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+        * 動物加入或移除我的最愛
+        *
+        * @param  \App\Animal  $animal
+        * @return \Illuminate\Http\Response
+        */
+    public function like(Animal $animal)
+    {
+        $animal->like()->toggle(Auth::user()->id);
+
         return response(null, Response::HTTP_NO_CONTENT);
     }
 }
