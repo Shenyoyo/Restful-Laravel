@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::apiResource('animal', 'AnimalController');
-Route::apiResource('types', 'TypeController');
+Route::apiResource('animals', 'Api\AnimalController');
+Route::apiResource('types', 'Api\TypeController');
 // 這裡可以用 like 辨識
-Route::post('animal/{animal}/like', 'AnimalController@like');
+Route::post('animals/{animal}/like', 'Api\AnimalController@like');

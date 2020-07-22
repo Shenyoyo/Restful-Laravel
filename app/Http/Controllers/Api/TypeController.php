@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Type;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Controllers\Controller;
 
 class TypeController extends Controller
 {
